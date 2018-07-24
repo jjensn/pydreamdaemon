@@ -7,11 +7,11 @@
 #             FC
 
 settings:
-  update_rate: 0.125 # Rate limit the requests to prevent overloading the bulb
+  update_rate: 0.15 # Rate limit the requests to prevent overloading the bulb
   max_brightness: 100
-  sensitivity: 2
-  effect: 'sudden' # 'sudden' or 'smooth'
-  duration: 100    # The duration of the effect, in milliseconds. The
+  sensitivity: 10
+  effect: 'smooth' # 'sudden' or 'smooth'
+  duration: 200    # The duration of the effect, in milliseconds. The
                    # minimum is 30. This is ignored for sudden effects.
 bulbs:
   - name: Front Right
