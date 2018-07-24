@@ -1,2 +1,2 @@
-# go-dreamscreen
-A daemon written in Go to shim DreamScreen status and management requests
+# pydreamdaemon
+A daemon written in Python to shim DreamScreen status and management requests
