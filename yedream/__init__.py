@@ -35,7 +35,7 @@ class YeDream:
             self._logger.error("Failed to load configuration file %s, are you sure it exists?", config_path)
             exit(2)
 
-        for light in self._settings["bulbs"]:
+        for light in list(self._settings["bulbs"]):
             light["state"] = state
             self._bulbs.append(Bulb(light["ip"], port=55443, effect=self._settings["settings"]["effect"], duration=self._settings["settings"]["duration"], auto_on=False))
 
@@ -43,7 +43,8 @@ class YeDream:
         self.project()
 
     def __exit__(self, *args):
-        for bulb in self._bulbs:
+        self._logger.info("Exiting...")
+        for bulb in list(self._bulbs):
             bulb['bulb'].stop_music()
 
     def _config_loop(self):
@@ -76,6 +77,7 @@ class YeDream:
 
             yeelight.start_music()
             self._settings["bulbs"][idx]["state"]["music_mode"] = 1
+
             brightness_thread = threading.Thread(target=light.set_brightness, args=[100])  # <- 1 element list
             brightness_thread.start()
         
@@ -154,16 +156,17 @@ class YeDream:
                     # bulb.get("object").set_rgb(r, g, b)
 
             else:
+                self._settings["bulbs"][idx]["state"]["power"] = "off"
                 # if bulb["state"]["power"] == "on":
 
                     # brightness_thread = threading.Thread(target=self._bulbs[idx].set_brightness, args=[1])  # <- 1 element list
                 # brightness_thread = threading.Thread(target=self._bulbs[idx].turn_off) #, args=[1])  # <- 1 element list
                 # brightness_thread.start()
-                # if bulb.get("state")["power"] == "on":
-                    # self._settings["bulbs"][idx]["state"]["power"] = "off"
+                if bulb.get("state")["power"] == "on":
+                    
                     # self._settings["bulbs"][idx]["state"]["power"] = "off"
                 # self._logger.info("Turning off %s", bulb["name"])
-                self._bulbs[idx].set_brightness(1)
+                    self._bulbs[idx].set_brightness(1)
                     # brightness_thread = threading.Thread(target=self._bulbs[idx].set_brightness, args=[1])  # <- 1 element list
                     # brightness_thread.start()
                     # bulb.get("object").turn_on()
