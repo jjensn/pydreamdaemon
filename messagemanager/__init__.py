@@ -36,14 +36,14 @@ class MessageManager:
             # elif self._subscription == False:
             #     self._sub_keep_alive.cancel()
 
-    def __init__(self, logger: object, redis_host: str = "localhost"):
+    def __init__(self, config:str, redis_host: str = "localhost"):
         """Setup udp listener."""
 
         self._subscription = False
-        self._logger = logger
+        self._logger = logging.getLogger(__name__)
         self._listener = Thread(target=self.listen, args=())
         self._stop_listening = False
-        self._yedream = YeDream(self._logger)
+        self._yedream = YeDream(config)
         
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -51,8 +51,8 @@ class MessageManager:
                                socket.SO_BROADCAST,
                                1)
 
-        self._q = redis.StrictRedis(host=redis_host, port=6379, db=0)
-        self._q.pubsub()
+        # self._q = redis.StrictRedis(host=redis_host, port=6379, db=0)
+        # self._q.pubsub()
 
         self.socket.bind(('', 8888))
 
@@ -88,7 +88,7 @@ class MessageManager:
                             self._send_packet('255.255.255.255', self._generate_subscription_packet(1), True)
                     elif message[0:2] == b"\xfc\x29" and message[4:6] == b"\x03\x16":
                         if self._subscription == True:
-                            self._logger.debug("Received a color stream from %s", ip)
+                            # self._logger.debug("Received a color stream from %s", ip)
                             self._parse_color_sections(message[6:])
                     else:
                         self._logger.debug("Unknown message %s", message)
@@ -171,7 +171,7 @@ class MessageManager:
                     }
  
             # self._q.publish("sidekick", json.dumps(ret))
-            self._yedream._zones = ret
+            self._yedream.zone_data = ret
 
 
 

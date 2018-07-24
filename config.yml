@@ -1,0 +1,51 @@
+#             BC
+#     ------------------
+# BL |7    6   5   4   3| BR
+#    |8     ZONES      2|
+# FL |9   10  11  12   1| FR
+#     ------------------
+#             FC
+
+settings:
+  update_rate: 0.125 # Rate limit the requests to prevent overloading the bulb
+  max_brightness: 100
+  sensitivity: 2
+  effect: 'sudden' # 'sudden' or 'smooth'
+  duration: 100    # The duration of the effect, in milliseconds. The
+                   # minimum is 30. This is ignored for sudden effects.
+bulbs:
+  - name: Front Right
+    ip: '192.168.1.82'
+    zones:
+      - 1
+      - 2
+      - 12
+  - name: Back Right
+    ip: '192.168.1.80'
+    zones:
+      - 2
+      - 3
+      - 4
+  - name: Back Center
+    ip: '192.168.1.83'
+    zones:
+      - 4
+      - 5
+      - 6
+  - name: Back Left
+    ip: '192.168.1.75'
+    zones:
+      - 6
+      - 7
+      - 8
+  - name: Front Left
+    ip: '192.168.1.81'
+    zones:
+      - 8
+      - 9
+      - 10
+  - name: Front Center
+    ip: '192.168.1.84'
+    zones:
+      - 10
+      - 11
