@@ -84,7 +84,7 @@ class MessageManager:
                     elif message[0:7] == b"\xfc\x05\x01\x30\x01\x0c\xff":
                         self._logger.debug("Received a subscription request")
                         if self._subscription == True:
-                            self._logger.debug("Sending a keep alive message!")
+                            self._logger.info("Sending a keep alive message!")
                             self._send_packet('255.255.255.255', self._generate_subscription_packet(1), True)
                     elif message[0:2] == b"\xfc\x29" and message[4:6] == b"\x03\x16":
                         if self._subscription == True:

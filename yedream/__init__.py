@@ -90,7 +90,7 @@ class YeDream:
             threading.Timer(5, self.project).start()
             return
 
-        threading.Timer(.25, self.project).start()
+        threading.Timer(.125, self.project).start()
 
         # threading.Timer(float(self._settings["settings"]["update_rate"]), self.project).start()
         settings_copy = copy.deepcopy(self._settings)
@@ -149,10 +149,11 @@ class YeDream:
                     # self._logger.info("Changing zone %s: [ %i ]", bulb["name"], delta)
                     # brightness_thread = threading.Thread(target=self._bulbs[idx].turn_on) #, args=[int(self._settings["settings"]["max_brightness"]])) 
                     # brightness_thread.start()
-                    self._bulbs[idx].set_brightness(100)
+                    if bulb.get("state")["power"] == "on":
+                        self._bulbs[idx].set_brightness(50)
                     color_thread = threading.Thread(target=self._bulbs[idx].set_rgb, args=[r, g, b])  # <- 1 element list
                     color_thread.start()
-
+                    
                     # bulb.get("object").set_rgb(r, g, b)
 
             else:
