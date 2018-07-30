@@ -6,11 +6,8 @@ import socketserver
 import crc8
 import json
 
-import redis
-
 from typing import Union, Dict, List, Generator
 from threading import Thread, Timer
-
 from yedream import YeDream
 
 class MessageManager:
@@ -31,11 +28,6 @@ class MessageManager:
             
             self._subscription = value
 
-            # if self._subscription == True:
-            #     self._sub_keep_alive.start()
-            # elif self._subscription == False:
-            #     self._sub_keep_alive.cancel()
-
     def __init__(self, config:str, redis_host: str = "localhost"):
         """Setup udp listener."""
 
@@ -50,9 +42,6 @@ class MessageManager:
         self.socket.setsockopt(socket.SOL_SOCKET,
                                socket.SO_BROADCAST,
                                1)
-
-        # self._q = redis.StrictRedis(host=redis_host, port=6379, db=0)
-        # self._q.pubsub()
 
         self.socket.bind(('', 8888))
 
@@ -132,22 +121,14 @@ class MessageManager:
         """Build a packet that DreamScreen can understand."""
         if not isinstance(payload, (list, tuple)):
             self._logger.error("payload type %s != list|tuple", type(payload))
-            
-        # if namespace == 1 and command == 12:
-        #     # Subscribe [ 0x1 , 0xC ]
-        #     flags = 48 # 0x30
-        # else:
-        #     if self.group_number == 0:
-        #         flags = 17
-        #     else:
-        #         flags = 33
-        
+                    
         resp = [252,
                 len(payload) + 5,
                 group_number,
                 flags,
                 namespace,
                 command]
+
         resp.extend(payload)
         resp.extend(self._crc8(bytearray(resp)))
         
@@ -169,14 +150,5 @@ class MessageManager:
                         "g": int.from_bytes(message[green:blue], byteorder='big', signed=False),
                         "b": int.from_bytes(message[blue:blue + 1], byteorder='big', signed=False)
                     }
- 
-            # self._q.publish("sidekick", json.dumps(ret))
+            
             self._yedream.zone_data = ret
-
-
-
-
-# def process_values(color_data: Dict):
-#     print ("%s", color_data)
-#     for key, value in color_data.items():
-#         print ("%i r %s g %s b %s" % (key, value['r'],value['g'],value['b'] ))

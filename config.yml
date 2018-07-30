@@ -7,7 +7,7 @@
 #             FC
 
 settings:
-  update_rate: 0.15 # Rate limit the requests to prevent overloading the bulb
+  update_rate: 0.25 # Rate limit the requests to prevent overloading the bulb
   max_brightness: 35
   sensitivity: 10
   effect: 'smooth' # 'sudden' or 'smooth'
