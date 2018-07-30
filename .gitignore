@@ -1,4 +1,4 @@
 .vscode
-api
 __pycache__
 **/*.pyc
+**/__pycache__/*
