@@ -8,8 +8,8 @@
 
 settings:
   update_rate: 0.25 # Rate limit the requests to prevent overloading the bulb
-  max_brightness: 35
-  sensitivity: 10
+  max_brightness: 35  # How bright or dim the lights should be when changing colors
+  sensitivity: 10 # The delta between the current color and last color (helps to prevent the bulbs from overloading)
   effect: 'smooth' # 'sudden' or 'smooth'
   duration: 200    # The duration of the effect, in milliseconds. The
                    # minimum is 30. This is ignored for sudden effects.
