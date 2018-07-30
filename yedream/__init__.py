@@ -150,7 +150,7 @@ class YeDream:
                     # brightness_thread = threading.Thread(target=self._bulbs[idx].turn_on) #, args=[int(self._settings["settings"]["max_brightness"]])) 
                     # brightness_thread.start()
                     if bulb.get("state")["power"] == "on":
-                        self._bulbs[idx].set_brightness(50)
+                        self._bulbs[idx].set_brightness(int(self._settings["settings"]["max_brightness"]))
                     color_thread = threading.Thread(target=self._bulbs[idx].set_rgb, args=[r, g, b])  # <- 1 element list
                     color_thread.start()
                     

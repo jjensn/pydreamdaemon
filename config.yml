@@ -8,7 +8,7 @@
 
 settings:
   update_rate: 0.15 # Rate limit the requests to prevent overloading the bulb
-  max_brightness: 100
+  max_brightness: 35
   sensitivity: 10
   effect: 'smooth' # 'sudden' or 'smooth'
   duration: 200    # The duration of the effect, in milliseconds. The
@@ -18,34 +18,34 @@ bulbs:
     ip: '192.168.1.82'
     zones:
       - 1
-      - 2
-      - 12
+      # - 2
+      # - 12
   - name: Back Right
     ip: '192.168.1.80'
     zones:
       - 2
-      - 3
-      - 4
+      # - 3
+      # - 4
   - name: Back Center
     ip: '192.168.1.83'
     zones:
       - 4
-      - 5
-      - 6
+      # - 5
+      # - 6
   - name: Back Left
     ip: '192.168.1.75'
     zones:
       - 6
-      - 7
-      - 8
+      # - 7
+      # - 8
   - name: Front Left
     ip: '192.168.1.81'
     zones:
-      - 8
       - 9
-      - 10
+      # - 10
+      # - 11
   - name: Front Center
     ip: '192.168.1.84'
     zones:
-      - 10
-      - 11
+      # - 11
+      - 12

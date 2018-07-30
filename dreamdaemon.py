@@ -9,7 +9,7 @@ def main():
     logging.basicConfig(level=logging.INFO)
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--config", help="path to config file", type=str)
+    parser.add_argument("-C", "--config", help="path to config file", type=str)
     args = parser.parse_args()
 
     if not args.config:
