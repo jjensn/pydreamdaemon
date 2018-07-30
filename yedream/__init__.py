@@ -46,19 +46,20 @@ class YeDream:
         for bulb in list(self._bulbs):
             bulb['bulb'].stop_music()
 
-    def _config_loop(self):
-        threading.Timer(10, self._config_loop).start()
-        try:
-            config_file = open(self._config_path)
-            new_settings = yaml.safe_load(config_file)
-            self._settings.config = new_settings.config
-            config_file.close()
+    # def _config_loop(self):
+    #     threading.Timer(10, self._config_loop).start()
+    #     try:
+    #         config_file = open(self._config_path)
+    #         new_settings = yaml.safe_load(config_file)
+    #         self._settings.config = new_settings.config
+    #         config_file.close()
         
-        except:
-            self._logger.error("Failed to load configuration file %s, are you sure it exists?", self._config_path)
-            exit(2)
+    #     except:
+    #         self._logger.error("Failed to load configuration file %s, are you sure it exists?", self._config_path)
+    #         exit(2)
 
     def _init_bulbs(self, bulbs):
+        """Prepare the bulbs for frequent streaming of color data."""
         for idx,light in enumerate(bulbs):
             yeelight = light
             yeelight.get_properties()
@@ -76,7 +77,7 @@ class YeDream:
             yeelight.start_music()
             self._settings["bulbs"][idx]["state"]["music_mode"] = 1
 
-            brightness_thread = threading.Thread(target=light.set_brightness, args=[100]) 
+            brightness_thread = threading.Thread(target=light.set_brightness, args=[int(self._settings["settings"]["max_brightness"])]) 
             brightness_thread.start()
         
     def project(self):
@@ -88,7 +89,7 @@ class YeDream:
             threading.Timer(5, self.project).start()
             return
 
-        threading.Timer(.125, self.project).start()
+        threading.Timer(float(self._settings["settings"]["update_rate"]), self.project).start()
 
         settings_copy = copy.deepcopy(self._settings)
         for idx, bulb in enumerate(settings_copy["bulbs"]):
