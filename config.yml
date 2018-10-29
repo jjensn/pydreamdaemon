@@ -7,45 +7,75 @@
 #             FC
 
 settings:
-  update_rate: 0.25 # Rate limit the requests to prevent overloading the bulb
-  max_brightness: 35  # How bright or dim the lights should be when changing colors
-  sensitivity: 10 # The delta between the current color and last color (helps to prevent the bulbs from overloading)
+  update_rate: 250 #550 # Rate limit the requests to prevent overloading the bulb
+  max_brightness: 100
+  sensitivity: 10
   effect: 'smooth' # 'sudden' or 'smooth'
-  duration: 200    # The duration of the effect, in milliseconds. The
+  duration: 500    # The duration of the effect, in milliseconds. The
                    # minimum is 30. This is ignored for sudden effects.
+  draw_debug_window: true
 bulbs:
-  - name: Front Right
-    ip: '192.168.1.82'
-    zones:
-      - 1
-      - 2
-      - 12
-  - name: Back Right
-    ip: '192.168.1.80'
-    zones:
-      - 2
-      - 3
-      - 4
-  - name: Back Center
-    ip: '192.168.1.83'
-    zones:
-      - 4
-      - 5
-      - 6
-  - name: Back Left
-    ip: '192.168.1.75'
-    zones:
-      - 6
-      - 7
-      - 8
   - name: Front Left
-    ip: '192.168.1.81'
+    ip: '192.168.1.101'
     zones:
       - 9
       - 10
       - 11
+      - 12
+      - 1
   - name: Front Center
-    ip: '192.168.1.84'
+    ip: '192.168.1.110'
     zones:
+      - 9
+      - 10
       - 11
       - 12
+      - 1
+      
+  - name: Front Right
+    ip: '192.168.1.107'
+    zones:
+      - 9
+      - 10
+      - 11
+      - 12
+      - 1
+  - name: Back Right
+    ip: '192.168.1.81'
+    zones:
+      - 7
+      - 6
+      - 5
+      - 4
+      - 3
+  - name: Back Center
+    ip: '192.168.1.83'
+    zones:
+      - 7
+      - 6
+      - 5
+      - 4
+      - 3  
+  - name: Back Left
+    ip: '192.168.1.75'
+    zones:
+      - 7
+      - 6
+      - 5
+      - 4
+      - 3
+#         
+#   - name: Tree
+#     ip: '192.168.1.79'
+#     zones:
+#       - 8
+#       - 7
+#       - 9
+#       
+#   - name: Sloth
+#     ip: '192.168.1.86'
+#     zones:
+#       - 3
+#       - 2
+#       - 1
+

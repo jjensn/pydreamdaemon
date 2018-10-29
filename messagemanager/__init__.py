@@ -6,9 +6,12 @@ import socketserver
 import crc8
 import json
 
+import redis
+
 from typing import Union, Dict, List, Generator
 from threading import Thread, Timer
-from yedream import YeDream
+
+# from yedream import YeDream
 
 class MessageManager:
     """Communicate with DreamScreen devices."""
@@ -28,14 +31,16 @@ class MessageManager:
             
             self._subscription = value
 
-    def __init__(self, config:str, redis_host: str = "localhost"):
+    def __init__(self, config, pool):
         """Setup udp listener."""
 
         self._subscription = False
         self._logger = logging.getLogger(__name__)
         self._listener = Thread(target=self.listen, args=())
         self._stop_listening = False
-        self._yedream = YeDream(config)
+        self._redis = redis.Redis(connection_pool=pool)
+        self._last_message_time = datetime.datetime.now()
+        self._config = config
         
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -121,14 +126,13 @@ class MessageManager:
         """Build a packet that DreamScreen can understand."""
         if not isinstance(payload, (list, tuple)):
             self._logger.error("payload type %s != list|tuple", type(payload))
-                    
+        
         resp = [252,
                 len(payload) + 5,
                 group_number,
                 flags,
                 namespace,
                 command]
-
         resp.extend(payload)
         resp.extend(self._crc8(bytearray(resp)))
         
@@ -137,10 +141,21 @@ class MessageManager:
     def _parse_color_sections(self, message: bytes) -> Dict[int, Dict]:
             """Take a color subscription payload and convert to dictionary. """
             ret = {}
-            for count, element in enumerate(list(message), 0):
+
+            current_time = datetime.datetime.now()
+            delta = current_time - self._last_message_time
+
+            ms_delta = int(delta.total_seconds() * 1000)
+
+            if ms_delta < self._config["settings"]["update_rate"]:
+                return
+
+            self._logger.info("%dms elapsed, publishing data to redis..." % ms_delta)
+
+            for count, _ in enumerate(list(message), 0):
                 if (count + 1) % 3 == 0:
+                    
                     index = int(count / 3)
-                    # print ("cont %i", index)
                     red = int(count - 2)
                     green = int(red + 1)
                     blue = int(green + 1)
@@ -150,5 +165,6 @@ class MessageManager:
                         "g": int.from_bytes(message[green:blue], byteorder='big', signed=False),
                         "b": int.from_bytes(message[blue:blue + 1], byteorder='big', signed=False)
                     }
-            
-            self._yedream.zone_data = ret
+                    
+            self._redis.publish('dream-data', json.dumps(ret))
+            self._last_message_time = datetime.datetime.now()
